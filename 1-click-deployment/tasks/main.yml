@@ -18,35 +18,35 @@
 
   - name: Download Tomcat
     get_url:
-      url: {{Tomcat_Download_Url}}
-      dest: {{Tomcat_Download_Dest}}
+      url: "{{Tomcat_Download_Url}}"
+      dest: "{{Tomcat_Download_Dest}}"
       mode: 0777
-      owner: {{Tomcat_Application_Owner}}
-      group: {{Tomcat_Application_Group}}
+      owner: "{{Tomcat_Application_Owner}}"
+      group: "{{Tomcat_Application_Group}}"
 
   - name: Extract Tomcat
     unarchive:
-      src: {{Tomcat_Download_Dest}}
-      dest: {{Tomcat_Download_Dest}}
-      owner: {{Tomcat_Application_Owner}}
-      group: {{Tomcat_Application_Group}}
+      src: "{{Tomcat_Download_Dest}}"
+      dest: "{{Tomcat_Download_Dest}}"
+      owner: "{{Tomcat_Application_Owner}}"
+      group: "{{Tomcat_Application_Group}}"
       remote_src: yes
 
   - name: Copy tomcat users file to tomcat server
     copy:
       src: tomcat-users.xml
-      dest: {{Tomcat_Usersfile_Destination}}
+      dest: "{{Tomcat_Usersfile_Destination}}"
 
   - name: Copy context.xml
     copy:
       src: context.xml
-      dest: {{Tomcat_Contextfile_Destination}}
+      dest: "{{Tomcat_Contextfile_Destination}}"
 
 
   - name: Stop Tomcat server
     shell: ./shutdown.sh
     args:
-      chdir: "{{Tomcat_Download_Dest}}/bin"
+      chdir: ""{{Tomcat_Download_Dest}}"/bin"
 
   - name: Deploy Gameof Life.war
     amazon.aws.s3_object:
@@ -54,12 +54,12 @@
       secret_key: "{{Secret_Key}}"
       bucket: {{Bucket_Name}}
       object: {{Artifact_Name}}
-      dest: "{{Tomcat_Download_Dest}}/webapps/gameoflife.war"
+      dest: ""{{Tomcat_Download_Dest}}"/webapps/gameoflife.war"
       mode: get      
       
   - name: Start Tomcat
     shell: ./startup.sh
     args:
-      chdir: "{{Tomcat_Download_Dest}}/bin"
+      chdir: ""{{Tomcat_Download_Dest}}"/bin"
 
       
