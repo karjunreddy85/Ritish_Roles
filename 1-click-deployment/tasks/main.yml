@@ -52,8 +52,8 @@
     amazon.aws.s3_object:
       access_key: "{{Access_key}}"
       secret_key: "{{Secret_Key}}"
-      bucket: {{Bucket_Name}}
-      object: {{Artifact_Name}}
+      bucket: "{{Bucket_Name}}"
+      object: "{{Artifact_Name}}"
       dest: "{{Tomcat_Download_Dest}}/webapps/gameoflife.war"
       mode: get      
       
