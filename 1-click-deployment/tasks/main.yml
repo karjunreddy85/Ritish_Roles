@@ -26,7 +26,7 @@
 
   - name: Extract Tomcat
     unarchive:
-      src: "{{Tomcat_Download_Dest}}"
+      src: "{{Tomcat_Tar_File_Path}}" 
       dest: "{{Tomcat_Download_Dest}}"
       owner: "{{Tomcat_Application_Owner}}"
       group: "{{Tomcat_Application_Group}}"
