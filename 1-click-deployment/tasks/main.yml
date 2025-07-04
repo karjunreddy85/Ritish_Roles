@@ -1,2 +1,65 @@
 ---
-# tasks file for 1-click-deployment
+  - name: Install Packages
+    yum:
+      name: "{{item}}"
+      state: present
+    with_items:
+      - java-1.8.0
+      - python3
+      - python3-pip
+
+  - name: Install pip packages
+    pip:
+      name: "{{ item }}"
+      executable: pip3
+    loop:
+      - boto3
+      - botocore   
+
+  - name: Download Tomcat
+    get_url:
+      url: {{Tomcat_Download_Url}}
+      dest: {{Tomcat_Download_Dest}}
+      mode: 0777
+      owner: {{Tomcat_Application_Owner}}
+      group: {{Tomcat_Application_Group}}
+
+  - name: Extract Tomcat
+    unarchive:
+      src: {{Tomcat_Download_Dest}}
+      dest: {{Tomcat_Download_Dest}}
+      owner: {{Tomcat_Application_Owner}}
+      group: {{Tomcat_Application_Group}}
+      remote_src: yes
+
+  - name: Copy tomcat users file to tomcat server
+    copy:
+      src: tomcat-users.xml
+      dest: {{Tomcat_Usersfile_Destination}}
+
+  - name: Copy context.xml
+    copy:
+      src: context.xml
+      dest: {{Tomcat_Contextfile_Destination}}
+
+
+  - name: Stop Tomcat server
+    shell: ./shutdown.sh
+    args:
+      chdir: {{Tomcat_Download_Dest}}/bin
+
+  - name: Deploy Gameof Life.war
+    amazon.aws.s3_object:
+      access_key: "{{Access_key}}"
+      secret_key: "{{Secret_Key}}"
+      bucket: {{Bucket_Name}}
+      object: {{Artifact_Name}}
+      dest: {{Tomcat_Download_Dest}}/webapps/gameoflife.war
+      mode: get      
+      
+  - name: Start Tomcat
+    shell: ./startup.sh
+    args:
+      chdir: {{Tomcat_Download_Dest}}/bin
+
+      
