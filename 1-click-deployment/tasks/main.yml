@@ -46,7 +46,7 @@
   - name: Stop Tomcat server
     shell: ./shutdown.sh
     args:
-      chdir: ""{{Tomcat_Download_Dest}}"/bin"
+      chdir: "{{Tomcat_Download_Dest}}/bin"
 
   - name: Deploy Gameof Life.war
     amazon.aws.s3_object:
@@ -54,12 +54,12 @@
       secret_key: "{{Secret_Key}}"
       bucket: {{Bucket_Name}}
       object: {{Artifact_Name}}
-      dest: ""{{Tomcat_Download_Dest}}"/webapps/gameoflife.war"
+      dest: "{{Tomcat_Download_Dest}}/webapps/gameoflife.war"
       mode: get      
       
   - name: Start Tomcat
     shell: ./startup.sh
     args:
-      chdir: ""{{Tomcat_Download_Dest}}"/bin"
+      chdir: "{{Tomcat_Download_Dest}}/bin"
 
       
